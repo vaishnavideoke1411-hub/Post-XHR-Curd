@@ -5,7 +5,7 @@ const title = document.getElementById('title')
 const body = document.getElementById('body')
 const userId = document.getElementById('userId')
 const AddObj = document.getElementById('AddObj')
-const UpdateObj = document.getElementById('UpdateObj')
+const UpdateBtn = document.getElementById('UpdateObj')
 const cardContainer = document.getElementById('cardContainer')
 const spinner = document.getElementById('spinner')
 
@@ -13,7 +13,7 @@ let productArr = []
 
 let BASE_URL = 'https://jsonplaceholder.typicode.com'
 
-function snackbar(msg , icon){
+function snackbar(msg,icon){
     swal.fire({
         title : msg,
         icon : icon,
@@ -85,7 +85,7 @@ function onSubmit(ele){
 
     productArr.unshift(newObj)
 
-    cl(productArr)
+    // cl(productArr)
 
     let xhr = new XMLHttpRequest()
 
@@ -104,11 +104,11 @@ function onSubmit(ele){
             div.innerHTML = `
                 <div class="card h-100">
                     <div class="card-header">
-                        <h2>${ele.title}</h2>
+                        <h2>${newObj.title}</h2>
                     </div>
 
                     <div class="card-body">
-                        <p>${ele.body}</p>
+                        <p>${newObj.body}</p>
                     </div>
 
                     <div class="card-footer d-flex justify-content-between">
@@ -125,7 +125,7 @@ function onSubmit(ele){
                 cardContainer.prepend(div)
                 inputForm.reset()
 
-                snackbar(`The new card ${responce.id} is added Successfully...! ',' success`)
+                snackbar(`The new card ${responce.id} is added Successfully...! `, `success`)
         }
     }
 
@@ -144,7 +144,7 @@ function onEdit(ele){
 
     let Post_url = `${BASE_URL}/posts/${EditId}`
 
-    xhr.open('POST' , Post_url)
+    xhr.open('GET' , Post_url)
 
     xhr.send(null)
 
@@ -157,7 +157,7 @@ function onEdit(ele){
         userId.value = EditObj.userId
 
         AddObj.classList.add('d-none')
-        UpdateObj.classList.remove('d-none')
+        UpdateBtn.classList.remove('d-none')
     }
 
     spinner.classList.add('d-none')
@@ -181,7 +181,7 @@ function onUpdate(){
 
     xhr.open('PUT',Put_url)
 
-    xhr.send(UpdateObj)
+    xhr.send(JSON.stringify(UpdateObj))
 
     xhr.onload = function(){
         cl(xhr.responce)
@@ -195,14 +195,14 @@ function onUpdate(){
         let p = div.querySelector('.card-body p')
 
         p.innerText = UpdateObj.body
-        snackbar(`The Peoduct ${UpdateId} is Updated Successfully...! '.' success.`)
+        snackbar(`The Peoduct ${updateId} is Updated Successfully...! '.' success.`)
 
         inputForm.reset()
         AddObj.classList.remove('d-none')
-        UpdateObj.classList.add('d-none')
+        UpdateBtn.classList.add('d-none')
     }
 
-    spinner.classList.add('d=none')
+    spinner.classList.add('d-none')
 }
 
 function onRemove(ele){
@@ -210,16 +210,18 @@ function onRemove(ele){
 
     let removeId = ele.closest('.col-md-3').id
 
-    swal.fire({
-        title : "Are you Sure?" ,
-        text : "You won't be able to revert this...!",
-        icon : "Warning" ,
-        showCanacelButton : true ,
-        confirmButtonColor : "#d33" ,
-        confirmButtonText : "Yes , Delete it ...!"
-    }).then((result) => {
-        
-        if(result.isConfirmed){
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+
+            }).then((result) => {
+                
+            if (result.isConfirmed){
             let Delete_url = `${BASE_URL}/posts/${removeId}`
 
             let xhr = new XMLHttpRequest()
@@ -241,4 +243,4 @@ function onRemove(ele){
 
 
 inputForm.addEventListener('submit' , onSubmit)
-UpdateObj.addEventListener('click' , onUpdate)
+UpdateBtn.addEventListener('click' , onUpdate)

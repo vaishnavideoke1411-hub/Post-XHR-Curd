@@ -5,6 +5,18 @@
     text-overflow: ellipsis;
 }
 
+body{
+    background-color: azure;
+}
+
+.card {
+    background-color: rgb(240, 228, 228);
+}
+
+.card .card-header{
+    background-color: rgb(158, 187, 241);
+}
+
 .spinner{
     position: fixed;
     top: 0;
